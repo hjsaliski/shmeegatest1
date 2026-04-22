@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The ShmeeGA Tour 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2a2a;
+    --navy-mid: #1a3d3d;
+    --green: #2d6b4a;
+    --green-light: #3a8a5f;
+    --cream: #f5f0e8;
+    --cream-dark: #ede6d6;
+    --orange: #c4622d;
+    --orange-light: #d4733e;
+    --gold: #c9a84c;
+    --text-dark: #0f2a2a;
+    --text-mid: #2a4a4a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Crimson Text',Georgia,serif; background:var(--cream); color:var(--text-dark); min-height:100vh; }
+
+  /* HEADER */
+  header { background:var(--navy); border-bottom:3px solid var(--orange); position:sticky; top:0; z-index:100; box-shadow:0 4px 20px rgba(0,0,0,0.4); }
+  .header-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 2rem; height:72px; }
+  .logo-wrap { display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .logo-img { width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); flex-shrink:0; }
+  .logo-fallback { width:48px; height:48px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; border:2px solid var(--gold); flex-shrink:0; }
+  .logo-text { font-family:'Playfair Display',serif; font-weight:900; font-size:1.25rem; color:var(--cream); letter-spacing:0.04em; line-height:1.1; }
+  .logo-text span { display:block; font-size:0.6rem; font-family:'Crimson Text',serif; letter-spacing:0.18em; color:var(--gold); text-transform:uppercase; }
+  nav a { color:rgba(245,240,232,0.75); text-decoration:none; font-family:'Libre Baskerville',serif; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; padding:0 1rem; height:72px; display:inline-flex; align-items:center; border-bottom:3px solid transparent; margin-bottom:-3px; transition:all 0.2s; }
+  nav a:hover, nav a.active { color:var(--cream); border-bottom-color:var(--orange); background:rgba(255,255,255,0.04); }
+
+  /* PAGES */
+  .page { display:none; } .page.active { display:block; }
+
+  /* HERO */
+  .hero { background:var(--navy); background-image:radial-gradient(ellipse at 20% 50%,rgba(45,107,74,0.22) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(196,98,45,0.14) 0%,transparent 50%); padding:5rem 2rem 4rem; text-align:center; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px); pointer-events:none; }
+  .hero-badge { display:inline-block; background:var(--orange); color:var(--cream); font-family:'Libre Baskerville',serif; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.35rem 1.2rem; border-radius:2px; margin-bottom:1.2rem; position:relative; z-index:1; }
+  .hero h1 { font-family:'Playfair Display',serif; font-weight:900; font-size:clamp(2.8rem,7vw,5.5rem); color:var(--cream); line-height:1; margin-bottom:0.3rem; position:relative; z-index:1; }
+  .hero h1 em { color:var(--gold); font-style:italic; }
+  .hero-sub { font-family:'Crimson Text',serif; font-size:1.1rem; color:rgba(245,240,232,0.5); letter-spacing:0.06em; margin-bottom:3rem; font-style:italic; position:relative; z-index:1; }
+  .hero-stats { display:flex; justify-content:center; flex-wrap:wrap; max-width:680px; margin:0 auto 3rem; border:1px solid rgba(245,240,232,0.14); border-radius:4px; overflow:hidden; position:relative; z-index:1; }
+  .hero-stat { flex:1; min-width:130px; padding:1.4rem 1rem; border-right:1px solid rgba(245,240,232,0.14); text-align:center; }
+  .hero-stat:last-child { border-right:none; }
+  .hero-stat-val { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--gold); display:block; line-height:1; margin-bottom:0.3rem; }
+  .hero-stat-label { font-size:0.6rem; letter-spacing:0.14em; text-transform:uppercase; color:rgba(245,240,232,0.4); font-family:'Libre Baskerville',serif; }
+  .hero-cta { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+
+  /* BUTTONS */
+  .btn { font-family:'Libre Baskerville',serif; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; padding:0.85rem 1.8rem; border-radius:2px; cursor:pointer; border:none; transition:all 0.2s; display:inline-flex; align-items:center; gap:0.5rem; }
+  .btn-primary { background:var(--orange); color:var(--cream); } .btn-primary:hover { background:var(--orange-light); transform:translateY(-1px); }
+  .btn-green { background:var(--green); color:var(--cream); } .btn-green:hover { background:var(--green-light); transform:translateY(-1px); }
+  .btn-outline { background:transparent; color:var(--cream); border:1px solid rgba(245,240,232,0.35); } .btn-outline:hover { border-color:var(--cream); }
+
+  /* SECTION */
+  .section { max-width:1200px; margin:0 auto; padding:4rem 2rem; }
+  .section-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:2rem; padding-bottom:1rem; border-bottom:2px solid var(--navy); }
+  .section-title { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--navy); }
+  .section-title span { color:var(--orange); }
+  .section-link { font-family:'Libre Baskerville',serif; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); text-decoration:none; cursor:pointer; }
+  .section-link:hover { color:var(--orange); }
+
+  /* LEADERBOARD */
+  .lb-table { width:100%; border-collapse:collapse; }
+  .lb-table thead tr { background:var(--navy); color:var(--cream); }
+  .lb-table thead th { font-family:'Libre Baskerville',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; padding:0.9rem 1rem; text-align:left; font-weight:400; }
+  .lb-table tbody tr { border-bottom:1px solid var(--cream-dark); transition:background 0.15s; }
+  .lb-table tbody tr:hover { background:rgba(45,107,74,0.05); }
+  .lb-table tbody tr:first-child { background:rgba(201,168,76,0.07); }
+  .lb-table td { padding:1rem; vertical-align:middle; }
+  .pos-cell { font-family:'Playfair Display',serif; font-weight:700; font-size:1.1rem; color:var(--navy-mid); width:50px; }
+  .pos-1 { color:var(--gold); font-size:1.3rem; }
+  .player-name { font-family:'Playfair Display',serif; font-weight:600; font-size:1.05rem; color:var(--navy); }
+  .team-badge { display:inline-block; font-family:'Libre Baskerville',serif; font-size:0.57rem; letter-spacing:0.08em; text-transform:uppercase; padding:0.2rem 0.5rem; border-radius:2px; margin-left:0.4rem; }
+  .team-genocide { background:rgba(196,98,45,0.14); color:var(--orange); }
+  .team-banshees { background:rgba(45,107,74,0.14); color:var(--green); }
+  .pts-cell { font-family:'Playfair Display',serif; font-weight:700; font-size:1.1rem; color:var(--navy); text-align:right; }
+
+  /* CUPS BANNER */
+  .cups-banner { background:var(--navy); background-image:radial-gradient(ellipse at 30% 50%,rgba(45,107,74,0.18) 0%,transparent 70%); padding:3rem 2rem; }
+  .cups-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr auto 1fr; gap:2rem; align-items:center; }
+  .cup-team { text-align:center; }
+  .cup-team-name { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--cream); margin-bottom:0.3rem; }
+  .cup-score { font-family:'Playfair Display',serif; font-size:4rem; font-weight:900; line-height:1; }
+  .cup-score.g { color:var(--green-light); } .cup-score.o { color:var(--orange); }
+  .cup-div { text-align:center; }
+  .cup-lbl { font-family:'Libre Baskerville',serif; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); display:block; }
+  .cup-vs { font-family:'Playfair Display',serif; font-size:1.4rem; color:rgba(245,240,232,0.2); font-style:italic; margin:0.3rem 0; }
+
+  /* SCHEDULE */
+  .sched-grid { border:1px solid var(--cream-dark); border-radius:4px; overflow:hidden; }
+  .sched-row { display:grid; grid-template-columns:100px 1fr 200px 80px 120px; border-bottom:1px solid var(--cream-dark); align-items:center; }
+  .sched-row:last-child { border-bottom:none; }
+  .sched-row.hdr { background:var(--navy); }
+  .sched-row.hdr .sc { font-family:'Libre Baskerville',serif; font-size:0.58rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,240,232,0.5); padding:0.8rem 1rem; }
+  .sched-row.completed { background:rgba(45,107,74,0.03); }
+  .sched-row.upcoming { background:var(--cream); }
+  .sched-row.next { background:rgba(196,98,45,0.05); border-left:3px solid var(--orange); }
+  .sc { padding:1rem; font-size:0.95rem; }
+  .sc-date { font-family:'Playfair Display',serif; font-weight:600; color:var(--navy-mid); font-size:0.88rem; }
+  .sc-event { font-family:'Playfair Display',serif; font-weight:600; font-size:1rem; color:var(--navy); }
+  .sc-course { font-size:0.82rem; color:var(--text-mid); margin-top:0.1rem; }
+  .sc-fmt { font-size:0.82rem; color:var(--text-mid); font-style:italic; }
+  .pill { display:inline-block; font-family:'Libre Baskerville',serif; font-size:0.57rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.27rem 0.65rem; border-radius:20px; }
+  .pill-done { background:rgba(45,107,74,0.12); color:var(--green); }
+  .pill-up { background:rgba(15,42,42,0.07); color:var(--navy-mid); }
+  .pill-next { background:var(--orange); color:var(--cream); }
+
+  /* RESULT CARDS */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5rem; }
+  .r-card { background:white; border:1px solid var(--cream-dark); border-radius:4px; overflow:hidden; transition:transform 0.2s,box-shadow 0.2s; }
+  .r-card:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(15,42,42,0.1); }
+  .r-card-hdr { background:var(--navy); padding:1rem 1.3rem; display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem; }
+  .r-card-name { font-family:'Playfair Display',serif; font-weight:700; font-size:0.95rem; color:var(--cream); line-height:1.3; }
+  .r-card-body { padding:1rem 1.3rem; }
+  .r-det { display:flex; gap:0.5rem; margin-bottom:0.4rem; font-size:0.9rem; color:var(--text-mid); align-items:flex-start; }
+  .r-det-lbl { font-family:'Libre Baskerville',serif; font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--navy-mid); min-width:60px; padding-top:0.12rem; flex-shrink:0; }
+  .r-winner { margin-top:0.8rem; padding-top:0.8rem; border-top:1px solid var(--cream-dark); display:flex; align-items:center; gap:0.6rem; }
+  .w-lbl { font-family:'Libre Baskerville',serif; font-size:0.57rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); display:block; }
+  .w-name { font-family:'Playfair Display',serif; font-weight:700; font-size:1rem; color:var(--navy); }
+
+  /* ═══ TEE TIMES PAGE ═══ */
+  .tee-hero { background:var(--navy); background-image:radial-gradient(ellipse at 70% 50%,rgba(45,107,74,0.18) 0%,transparent 60%); padding:3.5rem 2rem 3rem; text-align:center; }
+  .tee-hero h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.2rem); font-weight:700; color:var(--cream); margin-bottom:0.4rem; }
+  .tee-hero h2 em { color:var(--gold); font-style:italic; }
+  .tee-hero p { color:rgba(245,240,232,0.5); font-size:1rem; font-style:italic; }
+  .tee-wrap { max-width:880px; margin:0 auto; padding:2.5rem 2rem; }
+
+  /* Create card */
+  .create-card { background:white; border:2px dashed rgba(15,42,42,0.16); border-radius:6px; padding:1.8rem; margin-bottom:2.5rem; }
+  .create-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--navy); margin-bottom:1.2rem; }
+  .form-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(195px,1fr)); gap:0.9rem; margin-bottom:1.1rem; }
+  .fg { display:flex; flex-direction:column; gap:0.32rem; }
+  .fg label { font-family:'Libre Baskerville',serif; font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--navy-mid); }
+  .fg input,.fg select { font-family:'Crimson Text',serif; font-size:1rem; padding:0.58rem 0.8rem; border:1px solid rgba(15,42,42,0.18); border-radius:3px; background:var(--cream); color:var(--navy); width:100%; }
+  .fg input:focus,.fg select:focus { outline:none; border-color:var(--green); background:white; }
+  .create-note { font-size:0.82rem; color:var(--text-mid); font-style:italic; margin-top:0.6rem; }
+
+  /* Tee card */
+  .t-card { background:white; border:1px solid var(--cream-dark); border-radius:6px; overflow:hidden; margin-bottom:1.1rem; box-shadow:0 2px 8px rgba(15,42,42,0.04); transition:box-shadow 0.2s; }
+  .t-card:hover { box-shadow:0 5px 20px rgba(15,42,42,0.09); }
+  .t-card-hdr { background:var(--navy-mid); padding:1rem 1.4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; }
+  .t-card-name { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--cream); }
+  .t-meta { display:flex; gap:1rem; flex-wrap:wrap; align-items:center; }
+  .t-meta-item { font-family:'Libre Baskerville',serif; font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.55); display:flex; align-items:center; gap:0.3rem; }
+  .t-meta-item strong { color:var(--gold); }
+  .t-card-body { padding:1.2rem 1.4rem; display:grid; grid-template-columns:1fr auto; gap:1.5rem; align-items:start; }
+  .t-info-row { display:flex; gap:2rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .t-info-lbl { font-family:'Libre Baskerville',serif; font-size:0.57rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--navy-mid); display:block; margin-bottom:0.1rem; }
+  .t-info-val { font-size:0.95rem; color:var(--text-dark); }
+  .cost-badge { display:inline-block; background:rgba(201,168,76,0.13); color:var(--gold); font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; padding:0.25rem 0.7rem; border-radius:3px; border:1px solid rgba(201,168,76,0.28); }
+  .slots-lbl { font-family:'Libre Baskerville',serif; font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--navy-mid); margin-bottom:0.55rem; display:flex; justify-content:space-between; }
+  .spots-open { color:var(--orange); }
+  .slots { display:grid; grid-template-columns:repeat(4,1fr); gap:0.45rem; }
+  .slot { border-radius:4px; padding:0.6rem 0.45rem; text-align:center; min-height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:all 0.18s; border:1px solid transparent; }
+  .slot.filled { background:rgba(45,107,74,0.08); border-color:rgba(45,107,74,0.22); }
+  .slot.open { background:var(--cream); border:1px dashed rgba(15,42,42,0.18); cursor:pointer; }
+  .slot.open:hover { background:rgba(196,98,45,0.07); border-color:var(--orange); }
+  .slot-name { font-family:'Playfair Display',serif; font-size:0.8rem; font-weight:600; color:var(--navy); line-height:1.2; }
+  .slot-team-lbl { font-size:0.6rem; color:var(--text-mid); margin-top:0.12rem; }
+  .slot-plus { font-size:1.2rem; color:rgba(15,42,42,0.18); line-height:1; }
+  .slot-open-lbl { font-family:'Libre Baskerville',serif; font-size:0.52rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(15,42,42,0.28); margin-top:0.18rem; }
+  .full-tag { display:inline-block; background:rgba(15,42,42,0.07); color:var(--navy-mid); font-family:'Libre Baskerville',serif; font-size:0.57rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.65rem; border-radius:20px; }
+  .dir-link { font-family:'Libre Baskerville',serif; font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--green); text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem; white-space:nowrap; }
+  .dir-link:hover { color:var(--orange); }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(15,42,42,0.68); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(2px); }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--cream); border-radius:6px; padding:2.4rem; max-width:410px; width:92%; box-shadow:0 20px 60px rgba(0,0,0,0.32); }
+  .modal-logo-wrap { text-align:center; margin-bottom:1.1rem; }
+  .modal-logo-wrap img { width:54px; height:54px; border-radius:50%; border:2px solid var(--gold); object-fit:cover; }
+  .modal h3 { font-family:'Playfair Display',serif; font-size:1.45rem; font-weight:700; color:var(--navy); margin-bottom:0.3rem; }
+  .modal-sub { color:var(--text-mid); font-size:0.9rem; margin-bottom:1.4rem; font-style:italic; }
+  .modal select { width:100%; font-family:'Crimson Text',serif; font-size:1.05rem; padding:0.78rem 1rem; border:1px solid rgba(15,42,42,0.2); border-radius:3px; background:white; color:var(--navy); margin-bottom:1.4rem; }
+  .modal-actions { display:flex; gap:0.75rem; justify-content:flex-end; }
+  .btn-cancel { background:transparent; color:var(--text-mid); border:1px solid rgba(15,42,42,0.18); font-family:'Libre Baskerville',serif; font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.68rem 1.3rem; border-radius:2px; cursor:pointer; }
+  .btn-cancel:hover { background:rgba(15,42,42,0.04); }
+  .btn-confirm { background:var(--green); color:var(--cream); border:none; font-family:'Libre Baskerville',serif; font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.68rem 1.5rem; border-radius:2px; cursor:pointer; transition:background 0.18s; }
+  .btn-confirm:hover { background:var(--green-light); }
+
+  /* HISTORY */
+  .hist-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; }
+  .hist-card { background:white; border:1px solid var(--cream-dark); border-radius:4px; overflow:hidden; }
+  .hist-yr { background:var(--navy); padding:1rem 1.4rem; font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--gold); display:flex; justify-content:space-between; align-items:center; }
+  .hist-yr span { font-size:0.62rem; color:rgba(201,168,76,0.45); font-family:'Libre Baskerville',serif; letter-spacing:0.1em; text-transform:uppercase; }
+  .hist-body { padding:1.2rem 1.4rem; }
+  .hist-champ { display:flex; align-items:center; gap:0.8rem; margin-bottom:0.9rem; padding-bottom:0.9rem; border-bottom:1px solid var(--cream-dark); }
+  .hc-lbl { font-family:'Libre Baskerville',serif; font-size:0.57rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); display:block; }
+  .hc-name { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; color:var(--navy); }
+
+  /* MISC */
+  .live-badge { display:inline-flex; align-items:center; gap:0.38rem; background:rgba(45,107,74,0.11); color:var(--green); font-family:'Libre Baskerville',serif; font-size:0.57rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.22rem 0.55rem; border-radius:20px; }
+  .live-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .loading { text-align:center; padding:3rem; color:var(--text-mid); font-style:italic; }
+
+  /* FOOTER */
+  footer { background:var(--navy); border-top:3px solid var(--orange); padding:2.5rem 2rem; text-align:center; margin-top:4rem; }
+  .footer-logo { width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid rgba(201,168,76,0.35); margin-bottom:0.7rem; }
+  footer p { font-family:'Libre Baskerville',serif; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,240,232,0.32); }
+  footer strong { color:var(--gold); }
+
+  /* RESPONSIVE */
+  /* HAMBURGER */
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:8px; background:none; border:none; }
+  .hamburger span { display:block; width:24px; height:2px; background:var(--cream); border-radius:2px; transition:all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity:0; }
+  .hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display:none;
+    position:fixed;
+    top:72px; left:0; right:0; bottom:0;
+    background:var(--navy);
+    z-index:99;
+    flex-direction:column;
+    padding:2rem;
+    gap:0;
+    border-top:1px solid rgba(245,240,232,0.1);
+  }
+  .mobile-menu.open { display:flex; }
+  .mobile-menu a {
+    color:rgba(245,240,232,0.75);
+    text-decoration:none;
+    font-family:'Libre Baskerville',serif;
+    font-size:1.1rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:1.2rem 0;
+    border-bottom:1px solid rgba(245,240,232,0.08);
+    transition:color 0.2s;
+  }
+  .mobile-menu a:hover, .mobile-menu a.active { color:var(--gold); }
+
+  @media(max-width:768px){
+    nav { display:none; }
+    .hamburger { display:flex; }
+    .sched-row{grid-template-columns:70px 1fr 100px;}
+    .sched-row .sc:nth-child(4),.sched-row .sc:nth-child(5){display:none;}
+    .t-card-body{grid-template-columns:1fr;}
+    .slots{grid-template-columns:repeat(2,1fr);}
+    .cups-inner{grid-template-columns:1fr;gap:1rem;text-align:center;}
+    .form-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:480px){
+    .form-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap" onclick="showPage('home')">
+      <img id="hdr-logo" class="logo-img" src="" alt="ShmeeGA" style="display:none">
+      <div id="hdr-fallback" class="logo-fallback">⛳</div>
+      <div class="logo-text"><span></span></div>
+    </div>
+    <nav id="main-nav">
+      <a href="#" class="active" onclick="nav(event,'home')">Home</a>
+      <a href="#" onclick="nav(event,'standings')">Standings</a>
+      <a href="#" onclick="nav(event,'schedule')">Schedule</a>
+      <a href="#" onclick="nav(event,'teetimes')">Tee Times</a>
+      <a href="#" onclick="nav(event,'history')">History</a>
+    </nav>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#" onclick="mobileNav(event,'home')">Home</a>
+  <a href="#" onclick="mobileNav(event,'standings')">Standings</a>
+  <a href="#" onclick="mobileNav(event,'schedule')">Schedule</a>
+  <a href="#" onclick="mobileNav(event,'teetimes')">Tee Times</a>
+  <a href="#" onclick="mobileNav(event,'history')">History</a>
+</div>
+
+<!-- ══ HOME ══ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">2026 Season · In Progress</div>
+    <h1>The ShmeeGA<br><em>Tour</em></h1>
+    <p class="hero-sub">Where legends are made, one net score at a time</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-val">4</span><span class="hero-stat-label">Done</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">10</span><span class="hero-stat-label">Total Events</span></div>
+      <div class="hero-stat"><span class="hero-stat-val" id="stat-leader" style="font-size:1rem;line-height:1.2;">—</span><span id="stat-leader-pts" style="color:var(--gold);font-family:'Libre Baskerville',serif;font-size:0.65rem;display:block;margin:0.3rem 0 0.1rem;letter-spacing:0.08em;"></span><span class="hero-stat-label">Leader</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">2–2</span><span class="hero-stat-label">Shmeet's Cup</span></div>
+    </div>
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="showPage('standings')">View Standings</button>
+      <button class="btn btn-outline" onclick="showPage('teetimes')">Tee Times ⛳</button>
+    </div>
+  </div>
+
+  <div class="cups-banner">
+    <div class="cups-inner">
+      <div class="cup-team"><div class="cup-team-name">Banshees</div><div class="cup-score g">2</div></div>
+      <div class="cup-div">
+        <span class="cup-lbl">Shmeet's Cup</span>
+        <div class="cup-vs">·</div>
+        <span class="cup-lbl" style="margin-top:0.4rem;display:block;">Season-long</span>
+      </div>
+      <div class="cup-team"><div class="cup-team-name">Gene-o-cide</div><div class="cup-score o">2</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Tour Points <span>Leaderboard</span></div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <div class="live-badge"><div class="live-dot"></div> Live</div>
+        <a class="section-link" onclick="showPage('standings')">Full Standings →</a>
+      </div>
+    </div>
+    <table class="lb-table"><thead><tr><th>Pos</th><th>Player</th><th>Team</th><th style="text-align:right">Tour Points</th></tr></thead>
+    <tbody id="home-lb"><tr><td colspan="4" class="loading">Loading…</td></tr></tbody></table>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="section-header">
+      <div class="section-title">Recent <span>Results</span></div>
+      <a class="section-link" onclick="showPage('schedule')">Full Schedule →</a>
+    </div>
+    <div class="card-grid" id="recent-results"></div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="section-header">
+      <div class="section-title">Next <span>Up</span></div>
+      <a class="section-link" onclick="showPage('teetimes')">Tee Times →</a>
+    </div>
+    <div id="next-up"></div>
+  </div>
+</div>
+
+<!-- ══ STANDINGS ══ -->
+<div id="page-standings" class="page">
+  <div class="hero" style="padding:3.5rem 2rem 2.5rem">
+    <div class="hero-badge">2026 Tour Points</div>
+    <h1 style="font-size:clamp(2rem,5vw,3.5rem)">Season <em>Standings</em></h1>
+  </div>
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Full <span>Standings</span></div>
+      <div class="live-badge"><div class="live-dot"></div> Google Sheets</div>
+    </div>
+    <table class="lb-table"><thead><tr><th>Pos</th><th>Player</th><th style="text-align:center">Wins</th><th style="text-align:center">Top 5</th><th style="text-align:center">Top 10</th><th style="text-align:right">Tour Points</th></tr></thead>
+    <tbody id="full-lb"><tr><td colspan="6" class="loading">Loading…</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ══ SCHEDULE ══ -->
+<div id="page-schedule" class="page">
+  <div class="hero" style="padding:3.5rem 2rem 2.5rem">
+    <div class="hero-badge">2026 Season Calendar</div>
+    <h1 style="font-size:clamp(2rem,5vw,3.5rem)">Tournament <em>Schedule</em></h1>
+  </div>
+  <div class="section">
+    <div class="section-header"><div class="section-title">2026 <span>Calendar</span></div></div>
+    <div class="sched-grid">
+      <div class="sched-row hdr">
+        <div class="sc">Date</div><div class="sc">Event</div><div class="sc">Format</div><div class="sc">Rds</div><div class="sc">Status</div>
+      </div>
+      <div id="sched-rows"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TEE TIMES ══ -->
+<div id="page-teetimes" class="page">
+  <div class="tee-hero">
+    <div class="hero-badge">Open to All Members</div>
+    <h2>Tee <em>Times</em></h2>
+    <p>Browse upcoming rounds · see who's playing · grab an open spot</p>
+  </div>
+
+  <div class="tee-wrap">
+
+    <!-- Create -->
+    <div class="create-card">
+      <div class="create-title">⛳ Post a New Tee Time</div>
+      <div class="form-grid">
+        <div class="fg"><label>Name / Title</label><input type="text" id="tt-name" placeholder="e.g. Saturday Morning Round"></div>
+        <div class="fg"><label>Course</label><input type="text" id="tt-course" placeholder="Course name"></div>
+        <div class="fg"><label>Date</label><input type="date" id="tt-date"></div>
+        <div class="fg"><label>Tee Time</label><input type="time" id="tt-time"></div>
+        <div class="fg"><label>Cost Per Person</label><input type="text" id="tt-cost" placeholder="e.g. $45"></div>
+        <div class="fg" style="grid-column:1/-1"><label>Address (for directions)</label><input type="text" id="tt-addr" placeholder="Full street address"></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;">
+        <button class="btn btn-green" onclick="createTeeTime()">+ Post Tee Time</button>
+        <p class="create-note">✱ Admin: add a "Tee Times" tab to the Sheet so these save permanently for everyone.</p>
+      </div>
+    </div>
+
+    <!-- Listings header -->
+    <div class="section-header" style="margin-bottom:1.4rem;">
+      <div class="section-title" style="font-size:1.4rem;">Upcoming <span>Rounds</span></div>
+      <span id="tee-count" style="font-family:'Libre Baskerville',serif;font-size:0.63rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);"></span>
+    </div>
+
+    <div id="tee-listings"></div>
+
+  </div>
+</div>
+
+<!-- ══ HISTORY ══ -->
+<div id="page-history" class="page">
+  <div class="hero" style="padding:3.5rem 2rem 2.5rem">
+    <div class="hero-badge">Tour Archive</div>
+    <h1 style="font-size:clamp(2rem,5vw,3.5rem)">Tour <em>History</em></h1>
+  </div>
+  <div class="section">
+    <div class="section-header"><div class="section-title">Past <span>Champions</span></div></div>
+    <div class="hist-grid">
+      <div class="hist-card">
+        <div class="hist-yr">2026 <span>In Progress</span></div>
+        <div class="hist-body">
+          <div class="hist-champ">
+            <div style="font-size:1.4rem;">🏆</div>
+            <div><span class="hc-lbl">Current Leader</span><div class="hc-name">Philip Gould</div></div>
+            <div style="margin-left:auto;text-align:right;"><span class="hc-lbl">Tour Points</span><div class="hc-name">15,302.7</div></div>
+          </div>
+          <div style="font-size:0.9rem;color:var(--text-mid);line-height:2;">
+            <div>🏅 Woodlands Welcome — <strong>Zac Novak</strong></div>
+            <div>🏅 Melee at the Mount — <strong>Burke McManus</strong></div>
+            <div>🏅 Greystone Grind Heritage — <strong>Philip Gould</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="hist-card" style="opacity:0.42;">
+        <div class="hist-yr">2025 <span>Archive</span></div>
+        <div class="hist-body" style="text-align:center;padding:2.5rem;color:var(--text-mid);font-style:italic;font-size:0.9rem;">Season archive coming soon</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>Join Tee Time</h3>
+    <p class="modal-sub" id="modal-desc">Select your name to join this group.</p>
+    <select id="modal-player"><option value="">— Select your name —</option></select>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="confirmJoin()">Join Group ⛳</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <img id="footer-logo" class="footer-logo" src="" alt="ShmeeGA" style="display:none">
+  <p><strong>The ShmeeGA Tour</strong> &nbsp;·&nbsp; 2026 Season &nbsp;·&nbsp; Data powered by Google Sheets</p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════
+// CONFIG — paste your logo URL here once hosted
+// ═══════════════════════════════════════════════
+const SHEET_ID  = '1FdlUDHmziUN8X9MGTu_AyLc38IJNPtT8F9HoSWR-ZWo';
+const LOGO_URL  = 'https://i.imgur.com/j8QksWa.png'; // <- set this to your hosted logo image URL
+
+// ═══════════════════════════════════════════════
+// LOGO INJECTION
+// ═══════════════════════════════════════════════
+function applyLogo() {
+  if (!LOGO_URL) return;
+  [['hdr-logo','hdr-fallback'],['footer-logo',null]].forEach(([imgId, fbId]) => {
+    const img = document.getElementById(imgId);
+    if (img) { img.src = LOGO_URL; img.style.display = ''; }
+    if (fbId) { const fb = document.getElementById(fbId); if(fb) fb.style.display='none'; }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// STATIC DATA (swapped for live fetch once sheet confirmed public)
+// ═══════════════════════════════════════════════
+const STANDINGS = [
+  {pos:'1',  player:'Philip Gould',        team:'Gene-o-cide', pts:15302.7},
+  {pos:'T2', player:'Burke McManus',        team:'Gene-o-cide', pts:10000.0},
+  {pos:'T2', player:'Zac Novak',            team:'Gene-o-cide', pts:10000.0},
+  {pos:'4',  player:'Jordan Germershausen', team:'Banshees',    pts:7968.8},
+  {pos:'5',  player:'Collin Pierson',       team:'Gene-o-cide', pts:5175.8},
+  {pos:'T6', player:'Alex Pfaff',           team:'Gene-o-cide', pts:3750.0},
+  {pos:'T6', player:'Drew Wicks',           team:'Gene-o-cide', pts:3750.0},
+  {pos:'T6', player:'JP McManus',           team:'Gene-o-cide', pts:3750.0},
+  {pos:'9',  player:'Brandon Filo',         team:'Banshees',    pts:2500.0},
+  {pos:'10', player:'Alex McNulty',         team:'Banshees',    pts:1552.7},
+];
+
+const SCHEDULE = [
+  {date:'Jan–Oct', event:"Shmeet's Cup",            course:'Fox Hollow',                format:'Match Play (year-long)', rds:'—', status:'completed'},
+  {date:'Mar 21',  event:'Woodlands Welcome',        course:'Woodlands',                 format:'Individual Net',         rds:'1', status:'completed', winner:'Zac Novak',     field:13},
+  {date:'Mar 29',  event:'Melee at the Mount',       course:'Mount Pleasant',            format:'Individual Net',         rds:'1', status:'completed', winner:'Burke McManus', field:11},
+  {date:'Apr 19',  event:'Greystone Grind Heritage', course:'Greystone',                 format:'Individual Net',         rds:'1', status:'completed', winner:'Philip Gould',  field:19},
+  {date:'May 9/16',event:'Mountain Memorial',        course:'Mountain Branch',           format:'Individual Net',         rds:'1', status:'next'},
+  {date:'June',    event:'Compass Point Classic',    course:'Compass Point',             format:'Individual Net',         rds:'1', status:'upcoming'},
+  {date:'July',    event:'ShmeeGA Championship',     course:'Hogneck / Queenstown',      format:'Individual Net (Major)', rds:'1', status:'upcoming'},
+  {date:'August',  event:'Rocky Point Rumble',       course:'Rocky Point',               format:'Team Stableford',        rds:'2', status:'upcoming'},
+  {date:'Sept',    event:'Nepo Invitational',        course:'Gibson Island / Hayfields', format:'Individual Net',         rds:'1', status:'upcoming'},
+  {date:'Oct',     event:'The Shmee Open',           course:'TBD (Major)',               format:'Individual Net (Major)', rds:'1', status:'upcoming'},
+];
+
+const ROSTER = ['Philip Gould','Burke McManus','Zac Novak','Jordan Germershausen',
+  'Collin Pierson','Alex Pfaff','Drew Wicks','JP McManus','Brandon Filo','Alex McNulty'];
+
+// ═══════════════════════════════════════════════
+// LIVE SHEET FETCH — ready to activate
+// ═══════════════════════════════════════════════
+async function fetchSheet(tabName) {
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(tabName)}`;
+  try {
+    const res  = await fetch(url);
+    const text = await res.text();
+    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
+    return json.table;
+  } catch(e) {
+    console.warn('Sheet fetch failed for tab:', tabName, e);
+    return null;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+function nav(e, id) { e.preventDefault(); showPage(id, e.currentTarget); }
+
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('#main-nav a').forEach(a => {
+    a.classList.toggle('active', a.textContent.trim().toLowerCase().replace(' ','') === id);
+  });
+  window.scrollTo(0, 0);
+}
+
+// ═══════════════════════════════════════════════
+// RENDER — Standings
+// ═══════════════════════════════════════════════
+function tc(t){ return t==='Gene-o-cide'?'team-genocide':t==='Banshees'?'team-banshees':''; }
+
+function renderLB(data, id) {
+  const isFullLB = id === 'full-lb';
+  const display = isFullLB ? data : data.slice(0, 10);
+  document.getElementById(id).innerHTML = display.map((p,i) => `
+    <tr>
+      <td class="pos-cell ${i===0?'pos-1':''}">${p.pos}</td>
+      <td><span class="player-name">${p.player}</span><span class="team-badge ${tc(p.team)}">${p.team}</span></td>
+      ${isFullLB ? `
+      <td style="text-align:center;font-family:'Playfair Display',serif;font-weight:600;color:var(--navy);">${p.wins ?? 0}</td>
+      <td style="text-align:center;font-family:'Playfair Display',serif;color:var(--text-mid);">${p.top5 ?? 0}</td>
+      <td style="text-align:center;font-family:'Playfair Display',serif;color:var(--text-mid);">${p.top10 ?? 0}</td>
+      ` : '<td></td>'}
+      <td class="pts-cell">${p.pts.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}</td>
+    </tr>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// RENDER — Schedule
+// ═══════════════════════════════════════════════
+function renderSchedule() {
+  document.getElementById('sched-rows').innerHTML = SCHEDULE.map(t => `
+    <div class="sched-row ${t.status}">
+      <div class="sc"><div class="sc-date">${t.date}</div></div>
+      <div class="sc"><div class="sc-event">${t.event}</div><div class="sc-course">${t.course}</div></div>
+      <div class="sc"><div class="sc-fmt">${t.format}</div></div>
+      <div class="sc"><div class="sc-fmt">${t.rds}</div></div>
+      <div class="sc">
+        ${t.status==='completed'?`<span class="pill pill-done">✓ Final</span>`:
+          t.status==='next'?`<span class="pill pill-next">▶ Next Up</span>`:
+          `<span class="pill pill-up">Upcoming</span>`}
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// RENDER — Home widgets
+// ═══════════════════════════════════════════════
+function renderHome() {
+  document.getElementById('stat-leader').textContent = STANDINGS[0].player;
+  document.getElementById('stat-leader-pts').textContent = STANDINGS[0].pts.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' pts';
+
+  const done = SCHEDULE.filter(t => t.status==='completed' && t.winner);
+  document.getElementById('recent-results').innerHTML = done.map(t => `
+    <div class="r-card">
+      <div class="r-card-hdr"><div class="r-card-name">${t.event}</div><span class="pill pill-done">✓ Final</span></div>
+      <div class="r-card-body">
+        <div class="r-det"><span class="r-det-lbl">Date</span><span>${t.date}</span></div>
+        <div class="r-det"><span class="r-det-lbl">Course</span><span>${t.course}</span></div>
+        <div class="r-det"><span class="r-det-lbl">Format</span><span>${t.format}</span></div>
+        <div class="r-det"><span class="r-det-lbl">Field</span><span>${t.field} players</span></div>
+        <div class="r-winner"><div style="font-size:1.3rem;">🏆</div><div><span class="w-lbl">Champion</span><div class="w-name">${t.winner}</div></div></div>
+      </div>
+    </div>`).join('');
+
+  const nxt = SCHEDULE.find(t => t.status==='next');
+  if (nxt) document.getElementById('next-up').innerHTML = `
+    <div class="r-card" style="max-width:400px;">
+      <div class="r-card-hdr"><div class="r-card-name">${nxt.event}</div><span class="pill pill-next">▶ Next Up</span></div>
+      <div class="r-card-body">
+        <div class="r-det"><span class="r-det-lbl">Date</span><span>${nxt.date}</span></div>
+        <div class="r-det"><span class="r-det-lbl">Course</span><span>${nxt.course}</span></div>
+        <div class="r-det"><span class="r-det-lbl">Format</span><span>${nxt.format}</span></div>
+        <div style="margin-top:1rem;"><button class="btn btn-primary" onclick="showPage('teetimes')">Browse Tee Times →</button></div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// TEE TIMES — standalone, in-memory
+// ═══════════════════════════════════════════════
+let teeTimes = [
+  {id:1, name:'Early Bird Saturday',  course:'Woodlands Golf Club',         date:'2026-05-09', time:'07:30', cost:'$45', addr:'1234 Woodlands Dr, Woodlands, TX',      players:['Philip Gould',null,null,null]},
+  {id:2, name:'Sunday Funday',        course:'Mountain Branch Golf Course', date:'2026-05-16', time:'09:00', cost:'$55', addr:'5678 Mountain Branch Rd, Houston, TX',  players:['Brandon Filo','Jordan Germershausen',null,null]},
+  {id:3, name:'Weekend Warmup',       course:'Greystone Golf & CC',         date:'2026-05-23', time:'08:15', cost:'$60', addr:'910 Greystone Blvd, Birmingham, AL',    players:['Zac Novak','Burke McManus','Collin Pierson','Alex Pfaff']},
+];
+let nextId = 4, pending = null;
+
+function fmtDate(d){ if(!d)return''; const[y,m,day]=d.split('-'); const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return `${mo[+m-1]} ${+day}, ${y}`; }
+function fmtTime(t){ if(!t)return''; const[h,m]=t.split(':'); const hr=+h; return `${hr%12||12}:${m} ${hr>=12?'PM':'AM'}`; }
+
+function renderTee() {
+  document.getElementById('tee-count').textContent = `${teeTimes.length} round${teeTimes.length!==1?'s':''} posted`;
+  if(!teeTimes.length){ document.getElementById('tee-listings').innerHTML=`<div class="loading">No tee times posted yet — be the first!</div>`; return; }
+
+  document.getElementById('tee-listings').innerHTML = teeTimes.map(tt => {
+    const filled = tt.players.filter(Boolean).length;
+    const full   = filled===4;
+    const slots  = tt.players.map((p,si) => {
+      if(p){ const td=STANDINGS.find(s=>s.player===p); return `<div class="slot filled"><div class="slot-name">${p.split(' ')[0]}<br>${p.split(' ').slice(1).join(' ')}</div>${td?`<div class="slot-team-lbl">${td.team}</div>`:''}</div>`; }
+      if(full){ return `<div class="slot" style="background:rgba(15,42,42,0.03);"><div class="slot-open-lbl">—</div></div>`; }
+      return `<div class="slot open" onclick="openModal(${tt.id},${si},'${tt.name}','${fmtTime(tt.time)}')"><div class="slot-plus">+</div><div class="slot-open-lbl">Open</div></div>`;
+    }).join('');
+    const mapsUrl = tt.addr?`https://maps.google.com/?q=${encodeURIComponent(tt.addr)}`:'#';
+    return `
+    <div class="t-card">
+      <div class="t-card-hdr">
+        <div class="t-card-name">${tt.name}</div>
+        <div class="t-meta">
+          <div class="t-meta-item">📅 <strong>${fmtDate(tt.date)}</strong></div>
+          <div class="t-meta-item">🕐 <strong>${fmtTime(tt.time)}</strong></div>
+          ${full?`<span class="full-tag">Full</span>`:`<div class="t-meta-item" style="color:var(--gold);">⛳ <strong>${4-filled} open</strong></div>`}
+        </div>
+      </div>
+      <div class="t-card-body">
+        <div>
+          <div class="t-info-row">
+            <div><span class="t-info-lbl">Course</span><span class="t-info-val">${tt.course}</span></div>
+            <div><span class="t-info-lbl">Cost / Person</span><span class="cost-badge">${tt.cost||'TBD'}</span></div>
+          </div>
+          <div class="slots-lbl">Players <span class="spots-open">${filled}/4 signed up</span></div>
+          <div class="slots">${slots}</div>
+        </div>
+        <div>${tt.addr?`<a class="dir-link" href="${mapsUrl}" target="_blank">📍 Directions</a>`:''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function createTeeTime() {
+  const name = document.getElementById('tt-name').value.trim();
+  const course = document.getElementById('tt-course').value.trim();
+  const date = document.getElementById('tt-date').value;
+  const time = document.getElementById('tt-time').value;
+  const cost = document.getElementById('tt-cost').value.trim();
+  const addr = document.getElementById('tt-addr').value.trim();
+  if(!name||!course||!date||!time){ alert('Please fill in Name, Course, Date, and Time.'); return; }
+  teeTimes.push({id:nextId++,name,course,date,time,cost:cost||'TBD',addr,players:[null,null,null,null]});
+  teeTimes.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  ['tt-name','tt-course','tt-date','tt-time','tt-cost','tt-addr'].forEach(id=>document.getElementById(id).value='');
+  renderTee();
+}
+
+function openModal(teeId, slotIdx, name, time) {
+  pending = {teeId, slotIdx};
+  document.getElementById('modal-desc').innerHTML = `Join <strong>${name}</strong> at <strong>${time}</strong>`;
+  document.getElementById('modal-player').value = '';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); pending=null; }
+
+function confirmJoin() {
+  const player = document.getElementById('modal-player').value;
+  if(!player){ alert('Select your name.'); return; }
+  if(teeTimes.some(tt=>tt.players.includes(player))){ alert(`${player} is already in a tee time!`); return; }
+  const tt = teeTimes.find(t=>t.id===pending.teeId);
+  if(tt){ tt.players[pending.slotIdx]=player; renderTee(); }
+  closeModal();
+}
+
+function populateRoster() {
+  document.getElementById('modal-player').innerHTML =
+    '<option value="">— Select your name —</option>' +
+    ROSTER.map(n=>`<option value="${n}">${n}</option>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// HAMBURGER MENU
+// ═══════════════════════════════════════════════
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobile-menu').classList.contains('open') ? 'hidden' : '';
+}
+
+function mobileNav(e, id) {
+  e.preventDefault();
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow = '';
+  showPage(id, e.currentTarget);
+  // sync active state in mobile menu
+  document.querySelectorAll('.mobile-menu a').forEach(a => {
+    a.classList.toggle('active', a.textContent.trim().toLowerCase().replace(/\s/g,'') === id);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// INIT — with live Sheet fetch for Standings
+// ═══════════════════════════════════════════════
+async function init() {
+  applyLogo();
+  renderSchedule();
+  renderHome();
+  populateRoster();
+  renderTee();
+
+  // Try to load standings live from Google Sheet
+  // The Standings tab has rows: 1=title, 2=subtitle, 3=blank, 4=blank, 5=headers, 6+=data
+  // gviz returns ALL rows so we need to find where real data starts
+  const table = await fetchSheet('Standings');
+  if (table && table.rows && table.rows.length) {
+    try {
+      const liveStandings = [];
+      for (const r of table.rows) {
+        if (!r.c) continue;
+        const col0 = r.c[0] ? String(r.c[0].v || '').trim() : '';
+        const col1 = r.c[1] ? String(r.c[1].v || '').trim() : '';
+        const col3 = r.c[3] ? r.c[3].v : null;
+        // Skip header/title rows — data rows have a position (number or T+number) in col A
+        // and a real player name in col B and a numeric tour points value in col D
+        if (!col0 || !col1 || col3 === null) continue;
+        if (col0 === 'Pos' || col1 === 'Player') continue; // skip header row
+        const pts = parseFloat(col3);
+        if (isNaN(pts)) continue; // skip non-data rows
+        liveStandings.push({
+          pos:    col0,
+          player: col1,
+          team:   r.c[2] ? String(r.c[2].v || '').trim() : '',
+          pts:    pts,
+          wins:   r.c[4] ? (r.c[4].v || 0) : 0,
+          top5:   r.c[5] ? (r.c[5].v || 0) : 0,
+          top10:  r.c[6] ? (r.c[6].v || 0) : 0,
+        });
+      }
+
+      if (liveStandings.length) {
+        renderLB(liveStandings, 'home-lb');
+        renderLB(liveStandings, 'full-lb');
+        document.getElementById('stat-leader').textContent = liveStandings[0].player;
+        document.getElementById('stat-leader-pts').textContent =
+          liveStandings[0].pts.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' pts';
+        console.log('✅ Live standings loaded:', liveStandings.length, 'players');
+        return;
+      }
+    } catch(e) {
+      console.warn('Could not parse live standings, using static data', e);
+    }
+  }
+
+  // Fallback to static data
+  renderLB(STANDINGS,'home-lb');
+  renderLB(STANDINGS,'full-lb');
+}
+
+init();
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+</script>
+
+<!--
+  ══════════════════════════════════════════════
+  NEXT STEPS:
+  1. Host your logo (upload to Imgur or similar) and paste the URL into LOGO_URL
+  2. Confirm sheet is public → live fetch activates automatically via fetchSheet()
+  3. Ask for Google Apps Script code when ready to make tee time signups permanent
+  ══════════════════════════════════════════════
+-->
+</body>
+</html>
